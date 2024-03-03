@@ -1,11 +1,31 @@
 import express from "express";
-import getBooksRouter from "./getBooks";
+import mongoose from "mongoose";
+import { errorHandler } from "./middleware/errorHandler";
+import { productRoutes } from "./routes/productRoutes";
+import { artisanRoutes } from "./routes/artiansRoutes";
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use("/api", getBooksRouter);
+// Connect to MongoDB
+mongoose
+  .connect("mongodb://localhost:27017/AestheticAbode")
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err: any) => console.error("Error connecting to MongoDB:", err));
 
-app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}`);
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use("/products", productRoutes);
+app.use("/artisans", artisanRoutes);
+
+// Error handling middleware
+app.use(errorHandler);
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;
