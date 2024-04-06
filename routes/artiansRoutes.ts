@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import {
   getArtisan,
   createArtisan,
@@ -7,6 +8,8 @@ import {
 } from "../controllers/artisanController";
 
 export const artisanRoutes = express.Router();
+
+artisanRoutes.use(cors({ origin: "http://localhost:1234" }));
 
 artisanRoutes.get("/", getArtisan);
 artisanRoutes.post("/", createArtisan);
